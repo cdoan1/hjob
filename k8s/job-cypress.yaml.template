@@ -1,0 +1,33 @@
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cypress-run
+spec:
+  template:
+    spec:
+      containers:
+      - name: cypress-run
+        image: quay.io/open-cluster-management/console-ui-tests:2.0.0-PR399-44c887f2d4a450098fce0335152acf7b363d657d 
+        env:
+        - name: BROWSER
+          value: chrome
+        - name: USER
+          value: cdoan@redhat.com
+        - name: TEST_GROUP
+          value: aws
+        - name: CYPRESS_TEST_MODE
+          value: functional
+        - name: CYPRESS_BASE_URL
+          value: https://multicloud-console.apps.stage.demo.red-chesterfield.com
+        - name: CYPRESS_OCP_CLUSTER_URL
+          value: https://api.stage.demo.red-chesterfield.com:6443
+        - name: CYPRESS_OCP_CLUSTER_USER
+          value: kubeadmin
+        - name: CYPRESS_VIDEO
+          value: "false"
+        - name: CYPRESS_OCP_CLUSTER_PASS
+          value: ${KUBEADMIN_PASSWORD}
+      restartPolicy: Never
+  backoffLimit: 1
